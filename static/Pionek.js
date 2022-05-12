@@ -5,7 +5,7 @@ class Pionek extends THREE.Mesh {
         this.material = new THREE.MeshBasicMaterial({
             color: id == 2 ? 0xFF0000 : 0xFFFFFF,
             side: THREE.DoubleSide,
-            wireframe: false,
+            map: id==2? new THREE.TextureLoader().load('./texture/sl.png') : new THREE.TextureLoader().load('./texture/sl2.png'),
             transparent: true,
             opacity: 1
         });
