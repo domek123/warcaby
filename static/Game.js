@@ -3,6 +3,8 @@ import Item from "./Item.js"
 class Game {
 
     constructor() {
+        this.move = 1
+        this.net = null
         this.user = null
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
@@ -62,6 +64,7 @@ class Game {
         }
     }
     makePionki = () => {
+        console.log("pionki robie")
         for (let i = 0; i < this.pionki.length; i++) {
             for (let j = 0; j < this.pionki[i].length; j++) {
                 if (this.pionki[i][j] == 2) {
@@ -104,12 +107,13 @@ class Game {
                     const z = (this.intersects[0].object.position.z + 175) / 50
                     if (this.pionki[z][x] == 0) {
                         if (this.blackItems.includes(this.intersects[0].object)) {
-                            // this.pionki[this.selObjZ][this.selObjX] = 0
-                            // this.pionki[z][x] = this.user == 1 ? 1 : 2
-                            console.log(this.pionki)
+                            this.pionki[this.selObjZ][this.selObjX] = 0
+                            this.pionki[z][x] = this.user == 1 ? 1 : 2
+
                             this.movingAnimation(this.intersects[0].object.position.x, this.intersects[0].object.position.z)
                             this.user == 1 ? this.selectedObj.changeColorWhite() : this.selectedObj.changeColorRed()
                             this.selectedObj = null
+                            this.net.Move(this.pionki)
                         }
                     }
 
@@ -133,15 +137,15 @@ class Game {
             .easing(TWEEN.Easing.Linear.None)
             .start()
     }
-    setPionki(tab, user) {
+    setPionki(tab) {
+        console.log(tab)
         this.pionki = tab
-        this.user = user
-        this.whiteChequer = []
-        this.redChequer = []
-        this.makePionki()
     }
 
-
+    setMove(move) {
+        console.log(move)
+        this.move = move
+    }
     render = () => {
         requestAnimationFrame(this.render);
         TWEEN.update()
@@ -158,6 +162,9 @@ class Game {
     }
     getPionki() {
         return this.pionki
+    }
+    setNet(net) {
+        this.net = net
     }
 }
 export default Game

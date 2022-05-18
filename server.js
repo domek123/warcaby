@@ -45,11 +45,36 @@ let pionki = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 1, 0, 1, 0, 1, 0],
     [0, 1, 0, 1, 0, 1, 0, 1],
-
 ];
-
-app.post("/update", (req, res) => {
-
+let newTab = [
+    [2, 0, 2, 0, 2, 0, 2, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1],
+];
+let move = 1
+let isPlay = false
+app.post("/updateTable", (req, res) => {
+    newTab = req.body.tab
+    console.table(newTab)
+    if (newTab !== pionki) {
+        console.log("nie rowna sie")
+        isPlay = true
+    }
+    res.end(JSON.stringify({ info: "start odliczania" }))
+})
+app.post("/compareTable", (req, res) => {
+    if (isPlay) {
+        pionki = newTab
+        isPlay = false
+        res.end(JSON.stringify({ pionki: newTab, move: move, msg: "ok" }))
+    } else {
+        res.end(JSON.stringify({ msg: "nie ok" }))
+    }
 })
 app.listen(PORT, () => {
     console.log("start servera")

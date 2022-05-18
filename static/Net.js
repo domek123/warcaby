@@ -24,8 +24,9 @@ class Net {
                                     const ob = { name: data.name, position: data.position, enemy: dt.enemy }
                                     this.ui.ClearLoginPanel(ob)
                                     this.game.setUser(1)
-                                    this.genGame(ob)
 
+                                    this.genGame(ob)
+                                    this.getPionki()
                                 }
                             })
                     }, 5000)
@@ -33,8 +34,9 @@ class Net {
                 else {
                     this.ui.ClearLoginPanel(data)
                     this.game.setUser(2)
-                    this.genGame(data)
 
+                    this.genGame(data)
+                    this.getPionki()
                 }
 
             })
@@ -54,15 +56,30 @@ class Net {
             this.game.setPos(data.position)
         }
     }
-    genPionki() {
-        const body = JSON.stringify({ tab: this.game.getPionki(), user: this.game.getUser() })
-        setInterval(fetch("/update", { method: "post" })
-            .then(resp => resp.json()
-                .then(data => {
-                    console.log(data)
-                    this.game.setPionki(data.tab, data.user)
-                }))
-            , 1000)
+    getPionki() {
+        console.log("start")
+        setInterval(() => {
+            fetch("/compareTable", { method: "post" })
+                .then(resp => resp.json()
+                    .then(data => {
+                        if (data.msg == "ok") {
+                            console.log(data)
+                            this.game.setPionki(data.pionki)
+                            this.game.setMove(data.move)
+                        }
+
+                    }))
+        }, 1000)
+    }
+    Move(tab) {
+        console.log("move")
+        const body = JSON.stringify({ tab: tab })
+        const headers = { "Content-Type": "application/json" }
+        fetch("/updateTable", { method: "post", body, headers })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.info)
+            })
     }
 }
 export default Net

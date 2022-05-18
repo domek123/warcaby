@@ -12,4 +12,6 @@ window.onload = () => {
 
     net.setUi(ui)
     net.setGame(game)
+
+    game.setNet(net)
 }
